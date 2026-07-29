@@ -83,8 +83,10 @@ if [ "${WP_INSTALL_TESTS_SKIP_UPDATE_CHECK:-false}" != "true" ]; then
 fi
 
 if [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+\-(beta|RC)[0-9]+$ ]]; then
-	WP_BRANCH=${WP_VERSION%\-*}
-	WP_TESTS_TAG="branches/$WP_BRANCH"
+	# Beta/RC versions — the stable branch (e.g. 7.1) does not exist yet on
+	# GitHub, so fall back to trunk for the test suite. WordPress core itself
+	# is still downloaded from wordpress.org which hosts beta archives.
+	WP_TESTS_TAG="trunk"
 elif [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+$ ]]; then
 	WP_TESTS_TAG="branches/$WP_VERSION"
 elif [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
